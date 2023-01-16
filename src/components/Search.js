@@ -96,6 +96,7 @@ function Search() {
 
         } catch (error) {
             console.log(error)
+            if(count>1)
             alert("OOps we encountered some error! Please try again later or try checking your input.")
         }
     }
