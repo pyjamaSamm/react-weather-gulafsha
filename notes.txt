@@ -1,0 +1,30 @@
+
+useEffect, useState - hook
+useEffect syntax:
+
+    useEffect(()=>{
+        //function
+    }, [dependency rate?])
+
+the function inside useEffect will change/execute as mnay times [dependency rate?] changes its value
+when [dependency rate?] is empty: [] then it means that the function will be executed when the window loads/reloaded/refreshed
+
+Promises (async functions return promises)
+
+pass data using props
+    <Componentname  {object}/>
+the above object will be passed as props
+
+can also pass as:
+    <WeatherCard info={tempInfo} />
+where info is the name used inside WeatherCard for tempInfo
+
+
+spread operator(three dots ...)
+spreads the value present inside an object(all the values can be used as it is)
+eg 
+    <WeatherCard {...tempInfo} />
+
+useEffect Hook:
+
+
