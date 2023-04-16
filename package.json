@@ -1,6 +1,6 @@
 {
   "homepage": "http://pyjamaSamm.github.io/",
-  "name": "weather-app-ga",
+  "name": "react-weather",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
