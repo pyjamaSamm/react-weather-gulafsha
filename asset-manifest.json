@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/react-weather-gulafsha/static/css/main.0e4d022f.css",
-    "main.js": "/react-weather-gulafsha/static/js/main.0803f998.js",
+    "main.js": "/react-weather-gulafsha/static/js/main.8ce77452.js",
     "index.html": "/react-weather-gulafsha/index.html",
     "main.0e4d022f.css.map": "/react-weather-gulafsha/static/css/main.0e4d022f.css.map",
-    "main.0803f998.js.map": "/react-weather-gulafsha/static/js/main.0803f998.js.map"
+    "main.8ce77452.js.map": "/react-weather-gulafsha/static/js/main.8ce77452.js.map"
   },
   "entrypoints": [
     "static/css/main.0e4d022f.css",
-    "static/js/main.0803f998.js"
+    "static/js/main.8ce77452.js"
   ]
 }
