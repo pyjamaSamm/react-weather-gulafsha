@@ -38,7 +38,7 @@ function Search() {
             ];
             if (lat != null && lon != null) {
                 count++;
-                let url5days = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
+                let url5days = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
                 let result5 = await fetch(url5days)
                 let data2 = await result5.json();
                 // console.log(data2)
