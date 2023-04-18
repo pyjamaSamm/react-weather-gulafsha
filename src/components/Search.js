@@ -21,6 +21,9 @@ function Search() {
             let result = await fetch(url);
             let data = await result.json();
 
+            //test comment
+            //testing
+
             //if(data.cod >=400)alert("OOps we encountered some error! Try again later");
 
             const { lon, lat } = data.coord
