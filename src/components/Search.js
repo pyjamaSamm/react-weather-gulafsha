@@ -18,7 +18,11 @@ function Search() {
     let count = 0;
     const getWeatherInfo = async () => {
         try {
-            let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchTerm.trim()}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
+            // trim the ends, and collapse runs of inner whitespace - the API rejects
+            // "new  york" outright, while single spaces between words are fine
+            let city = searchTerm.trim().replace(/\s+/g, " ")
+            if (city === "") return //nothing to look up
+            let url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
             let result = await fetch(url);
             let data = await result.json();
 
