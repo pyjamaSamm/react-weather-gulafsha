@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Weather App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React weather app that looks up current conditions for any city and shows a four-day outlook alongside them. Built with Create React App against the OpenWeather API.
 
-## Available Scripts
+**Live:** https://pyjamaSamm.github.io/react-weather-gulafsha
 
-In the project directory, you can run:
+Search a city and you get temperature in °C, a written description, humidity, pressure, wind speed and sunset time, plus a row of forecast cards. The weather icon changes with the conditions and switches to a night variant after the searched city's sunset. The app opens on Kolkata.
 
-### `npm start`
+## How it works
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Everything hangs off one component. [`Search.js`](src/components/Search.js) owns the input, calls the API and holds the response in a single `tempInfo` object, which it spreads into the two display components as props:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+Search.js  ──┬─→  WeatherCard.js       current conditions + the big icon
+             └─→  LowerWeatherCard.js  four forecast cards
+```
 
-### `npm test`
+Two requests per lookup:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Endpoint | Used for |
+| --- | --- |
+| `/data/2.5/weather?q={city}` | current conditions, and the `lat`/`lon` for the second call |
+| `/data/2.5/forecast?lat=&lon=` | the forecast row |
 
-### `npm run build`
+The forecast endpoint returns readings every three hours. `Search.js` samples indexes `9, 17, 25, 33` out of that list — roughly 27, 51, 75 and 99 hours out — so each card lands about a day apart at a similar time of day.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Day vs. night icons
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`dt`, `sys.sunrise` and `sys.sunset` in the response are all UTC epochs, so [`WeatherCard.js`](src/components/WeatherCard.js) compares them directly:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+let isNight = !!(dt && sunrise && sunset) && (dt < sunrise || dt >= sunset)
+```
 
-### `npm run eject`
+This deliberately avoids `new Date().getHours()`. Comparing the browser's clock against a sunset in another timezone reads as daytime whenever the two straddle local midnight — searching London from India in the morning would show a sun after dark.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Icons
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The icons are hand-written SVGs in [`src/assets/icons/`](src/assets/icons/), animated with CSS inside each file, so they run from a plain `<img src>` with no library and no network request.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| File | Conditions (OpenWeather `main`) |
+| --- | --- |
+| `day.svg` | `Clear` before sunset, and the fallback for anything unrecognised |
+| `night.svg` | `Clear` after sunset |
+| `cloudy-day.svg` | `Clouds` before sunset |
+| `cloudy-night.svg` | `Clouds` after sunset |
+| `cloudy.svg` | `Haze`, `Mist`, `Fog`, `Smoke`, `Dust` |
+| `rainy.svg` | `Rain`, `Drizzle` |
+| `thunder.svg` | `Thunder`, `Thunderstorm` |
+| `snowy.svg` | `Snow` |
+| `location.svg` | the pin next to the city name |
 
-## Learn More
+The mapping lives in one place, [`src/assets/icons/index.js`](src/assets/icons/index.js), as `iconFor(weather, isNight)` — both cards call it, so adding a condition is a one-file change. Every icon also carries a `prefers-reduced-motion: reduce` block that parks it in a still frame.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Running it locally
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+You need your own OpenWeather API key — a free one from [openweathermap.org/api](https://openweathermap.org/api) covers both endpoints used here. `.env` is gitignored, so a fresh clone has no key.
 
-### Code Splitting
+```bash
+git clone https://github.com/pyjamaSamm/react-weather-gulafsha.git
+cd react-weather-gulafsha
+npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+echo "REACT_APP_API_KEY=your_key_here" > .env
 
-### Analyzing the Bundle Size
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Then open http://localhost:3000.
 
-### Making a Progressive Web App
+The `REACT_APP_` prefix is required — Create React App only exposes variables with that prefix to the browser. Changing `.env` needs a dev-server restart; it is read at build time, not on reload.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+## Deploying
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+`homepage` in `package.json` points at the GitHub Pages URL, and `gh-pages` publishes the build:
 
-### Deployment
+```bash
+npm run deploy   # runs the build first via predeploy
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+`index.js` wraps the app in `HashRouter` so the Pages URL keeps working — a static host has no server-side routing to fall back on. No routes are defined yet; the router is there for when they are.
 
-### `npm run build` fails to minify
+## Project layout
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+public/
+  index.html          favicon.svg alongside it is local, not hosted
+src/
+  index.js            entry point, wraps <App> in HashRouter
+  App.js              renders <Search>
+  assets/icons/       the animated SVG set + iconFor() mapping
+  components/
+    Search.js         input, both API calls, shared state
+    WeatherCard.js    current conditions
+    LowerWeatherCard.js  forecast row
+    styles.css        styles for all three components
+```
+
+## Input handling
+
+The search box is normalised before the request goes out: ends trimmed, runs of inner whitespace collapsed to a single space (OpenWeather rejects `new  york`), and the result passed through `encodeURIComponent`. An empty box skips the request entirely.
+
+## Note
+No UI or charting libraries — the icons and layout are hand-written.
