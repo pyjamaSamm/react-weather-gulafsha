@@ -21,13 +21,12 @@ function WeatherCard(
 
     let sunsetTime
 
-    let location
-    if(name!=null)
-    location = `${name}, ${country}`
-    else location=""
-
-    if(country==null){
-        location = `${name}`
+    // before the first lookup returns, name and country are both undefined -
+    // building the string unconditionally used to paint the word "undefined"
+    // next to the location pin.
+    let location = ""
+    if (name != null) {
+        location = country != null ? `${name}, ${country}` : `${name}`
     }
 
     if (sunset) {
