@@ -3,10 +3,8 @@ import "../components/styles.css";
 import icons, { iconFor } from '../assets/icons';
 
 function LowerWeatherCard(
-    { temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, country, arr }
+    { name, arr }
 ) {
-    console.log(arr)
-    let d1
     const [t1, forData1] = useState("")
     const [t2, forData2] = useState("")
     const [t3, forData3] = useState("")
@@ -17,47 +15,46 @@ function LowerWeatherCard(
     const [weatherState4, setWeatherState4] = useState(icons.cloudy)
     useEffect(() => {
         try {
-            if (typeof (arr) !== undefined || arr.length === undefined) {
-                let description, date_desc
-                description = arr[1]["desc"];
-                date_desc = arr[1]["date"].split(" ")[1]
-                date_desc += " " + arr[1]["date"].split(" ")[0]
-                arr[1]["date"] = date_desc;
-                d1 = `${arr[1]["temp"]}` + "/" + date_desc + "/" + description;
-                console.log(arr[1]["date"])
-                console.log("d1 "+ d1)
-                forData1(d1)
-                if (description != null) {
-                    setWeatherState(iconFor(description))
-                }
-                description = arr[2]["desc"];
-                date_desc = arr[2]["date"].split(" ")[1]
-                date_desc += " " + arr[2]["date"].split(" ")[0]
-                arr[2]["date"] = date_desc;
-                d1 = `${arr[2]["temp"]}` + "/" + date_desc + "/" + description;
-                forData2(d1)
-                if (description != null) {
-                    setWeatherState2(iconFor(description))
-                }
-                description = arr[3]["desc"];
-                date_desc = arr[3]["date"].split(" ")[1]
-                date_desc += " " + arr[3]["date"].split(" ")[0]
-                arr[3]["date"] = date_desc;
-                d1 = `${arr[3]["temp"]}` + "/" + date_desc + "/" + description;
-                forData3(d1)
-                if (description != null) {
-                    setWeatherState3(iconFor(description))
-                }
+            // the effect reads arr[1..4], so anything shorter has nothing to show.
+            // the old guard compared typeof against undefined, which is never true.
+            if (!arr || arr.length < 5) return
+            let d1, description, date_desc
+            description = arr[1]["desc"];
+            date_desc = arr[1]["date"].split(" ")[1]
+            date_desc += " " + arr[1]["date"].split(" ")[0]
+            arr[1]["date"] = date_desc;
+            d1 = `${arr[1]["temp"]}/${date_desc}/${description}`;
+            forData1(d1)
+            if (description != null) {
+                setWeatherState(iconFor(description))
+            }
+            description = arr[2]["desc"];
+            date_desc = arr[2]["date"].split(" ")[1]
+            date_desc += " " + arr[2]["date"].split(" ")[0]
+            arr[2]["date"] = date_desc;
+            d1 = `${arr[2]["temp"]}/${date_desc}/${description}`;
+            forData2(d1)
+            if (description != null) {
+                setWeatherState2(iconFor(description))
+            }
+            description = arr[3]["desc"];
+            date_desc = arr[3]["date"].split(" ")[1]
+            date_desc += " " + arr[3]["date"].split(" ")[0]
+            arr[3]["date"] = date_desc;
+            d1 = `${arr[3]["temp"]}/${date_desc}/${description}`;
+            forData3(d1)
+            if (description != null) {
+                setWeatherState3(iconFor(description))
+            }
 
-                description = arr[4]["desc"];
-                date_desc = arr[4]["date"].split(" ")[1]
-                date_desc += " " + arr[4]["date"].split(" ")[0]
-                arr[4]["date"] = date_desc;
-                d1 = `${arr[4]["temp"]}` + "/" + date_desc + "/" + description;
-                forData4(d1)
-                if (description != null) {
-                    setWeatherState4(iconFor(description))
-                }
+            description = arr[4]["desc"];
+            date_desc = arr[4]["date"].split(" ")[1]
+            date_desc += " " + arr[4]["date"].split(" ")[0]
+            arr[4]["date"] = date_desc;
+            d1 = `${arr[4]["temp"]}/${date_desc}/${description}`;
+            forData4(d1)
+            if (description != null) {
+                setWeatherState4(iconFor(description))
             }
         } catch (err) {
 

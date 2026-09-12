@@ -4,7 +4,7 @@ import icons, { iconFor } from '../assets/icons';
 
 function WeatherCard(
     //props
-    { temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, sunrise, dt, country, arr }
+    { temp, humidity, pressure, weather, weatherDesc, name, windspeed, sunset, sunrise, dt, country }
 ) {
     //   return (
     //     <div>
@@ -20,11 +20,6 @@ function WeatherCard(
     const [weatherState, setWeatherState] = useState(icons.day)
 
     let sunsetTime
-    let months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    let day = new Date().toLocaleString().split(",")[0].split("/")[0]
-    let mon = months[parseInt(new Date().toLocaleString().split(",")[0].split("/")[1])]
-    let year = new Date().toLocaleString().split(",")[0].split("/")[2]
-    let formattedDate = `${day} ${mon}, ${year}`
 
     let location
     if(name!=null)
@@ -37,14 +32,10 @@ function WeatherCard(
 
     if (sunset) {
         let sec = sunset;
-        // console.log(sunset)
         let date = new Date(sec * 1000) //converts sec to ms
         sunsetTime = `${date.getHours()}:${date.getMinutes()} PM`
     } 
     else sunsetTime="--"
-    if(typeof(sunsetTime)==undefined){
-        console.log("")
-    }
     useEffect(() => {
         if (weather == null) return
         // dt, sunrise and sunset are all UTC epochs straight from the API, so this
@@ -72,7 +63,6 @@ function WeatherCard(
                         <div>
                             <div>{weatherDesc}</div>
                             <div className='cityName'><img src={icons.location} alt='location icon' className='locationIcon'></img>{location}</div>
-                            {/* <div className='date'>{formattedDate}</div> */}
                         </div>
                     </div>
                 </div>

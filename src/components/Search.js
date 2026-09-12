@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import "../components/styles.css"
-import icons from '../assets/icons';
 import WeatherCard from './WeatherCard';
 import LowerWeatherCard from './LowerWeatherCard';
 
@@ -37,7 +36,6 @@ function Search() {
                     temp: String,
                     date: String,
                     desc: String,
-                    link: String,
                 }
                 
             ];
@@ -61,7 +59,6 @@ function Search() {
                         temp: day1,
                         date: day1_date_format,
                         desc: des,
-                        link: icons.day
                     }
                     arr.push(data)
                 }
@@ -81,7 +78,7 @@ function Search() {
             const { temp, humidity, pressure } = data.main;
 
             // giving custom name to "main" under weather
-            let { main: weather, description: weatherDesc, icon } = data.weather[0]
+            let { main: weather, description: weatherDesc } = data.weather[0]
             const { name } = data; //name of the place
             let windspeed = data["wind"]["speed"]
             let sunset = data["sys"]["sunset"]
@@ -91,14 +88,14 @@ function Search() {
 
             let foundData = {}
             //make object of the found data to send it
-            if (lat != null && lon != null && arr.length!=0) {
+            if (lat != null && lon != null && arr.length!==0) {
                 foundData = {
-                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, sunrise, dt, country, arr
+                    temp, humidity, pressure, weather, weatherDesc, name, windspeed, sunset, sunrise, dt, country, arr
                 };
             }
             else{
                 foundData = {
-                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, sunrise, dt, country
+                    temp, humidity, pressure, weather, weatherDesc, name, windspeed, sunset, sunrise, dt, country
                 };
             }
         
