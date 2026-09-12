@@ -46,6 +46,7 @@ let cityReturned;
 beforeEach(() => {
     cityReturned = 'Kolkata';
     jest.spyOn(console, 'log').mockImplementation(() => { });
+    jest.spyOn(window, 'alert').mockImplementation(() => { });
     global.fetch = jest.fn((url) => Promise.resolve({
         json: () => Promise.resolve(
             url.includes('/forecast') ? fiveDayForecast() : currentWeather(cityReturned)
@@ -116,6 +117,26 @@ describe('Search', () => {
         expect(global.fetch).not.toHaveBeenCalled();
     });
 
+    it('fires exactly one lookup per press of Forecast', async () => {
+        await renderSearch();
+        await waitFor(() => expect(screen.getByText('Kolkata, IN')).toBeInTheDocument());
+        expect(weatherUrls()).toHaveLength(1);
+
+        await press('Forecast');
+        expect(weatherUrls()).toHaveLength(2);
+
+        await press('Forecast');
+        expect(weatherUrls()).toHaveLength(3);
+    });
+
+    it('does not look anything up until the page is interacted with', async () => {
+        await renderSearch();
+        await waitFor(() => expect(screen.getByText('Kolkata, IN')).toBeInTheDocument());
+
+        // one current reading plus its forecast, and nothing more
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
     it('keeps the last good reading on screen when a lookup fails', async () => {
         await renderSearch();
         await waitFor(() => expect(screen.getByText('Kolkata, IN')).toBeInTheDocument());
@@ -128,5 +149,27 @@ describe('Search', () => {
 
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
         expect(screen.getByText('Kolkata, IN')).toBeInTheDocument();
+    });
+
+    it('warns when a search the user asked for fails', async () => {
+        await renderSearch();
+        await waitFor(() => expect(screen.getByText('Kolkata, IN')).toBeInTheDocument());
+
+        global.fetch.mockRejectedValue(new Error('network down'));
+        const input = screen.getByRole('searchbox');
+        await userEvent.clear(input);
+        await userEvent.type(input, 'nowhere');
+        await press('Forecast');
+
+        await waitFor(() => expect(window.alert).toHaveBeenCalled());
+    });
+
+    it('stays quiet when the lookup on first paint fails', async () => {
+        global.fetch.mockRejectedValue(new Error('network down'));
+
+        await renderSearch();
+
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        expect(window.alert).not.toHaveBeenCalled();
     });
 });

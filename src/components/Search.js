@@ -9,13 +9,17 @@ function Search() {
     // functionName is responsible for changing the value of cityToSearch(aka value=searchTerm)
     //kolkata is the default value
     const [searchTerm, searchTermFunction] = useState("kolkata");
-    const [isStart, setIsStart] = useState(false);
+    // bumped once per press of Forecast. the effect below keys off it, so one
+    // press means exactly one lookup - the old boolean flag re-ran the effect
+    // on the way back down to false and fired three.
+    const [submitCount, setSubmitCount] = useState(0);
 
     //({}) empty object will help us send all the details to weather card for displaying it
     const [tempInfo, setTempInfo] = useState({})
 
-    let count = 0;
-    const getWeatherInfo = async () => {
+    // isUserSearch tells a failed press of Forecast (worth a message) from a
+    // failed lookup on first paint (which the user never asked for).
+    const getWeatherInfo = async (isUserSearch) => {
         try {
             // trim the ends, and collapse runs of inner whitespace - the API rejects
             // "new  york" outright, while single spaces between words are fine
@@ -40,7 +44,6 @@ function Search() {
                 
             ];
             if (lat != null && lon != null) {
-                count++;
                 let url5days = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
                 let result5 = await fetch(url5days)
                 let data2 = await result5.json();
@@ -103,18 +106,15 @@ function Search() {
 
         } catch (error) {
             console.log(error)
-            if(count>1)
-            alert("OOps we encountered some error! Please try again later or try checking your input.")
+            if (isUserSearch)
+                alert("OOps we encountered some error! Please try again later or try checking your input.")
         }
     }
     useEffect(() => {
-        if (count === 0)
-            getWeatherInfo()
-        if (isStart)
-            getWeatherInfo()
-        //call it only when the page refreshes hence []
-        setIsStart(false)
-    }, [isStart])
+        // runs once on first paint (submitCount 0), then once per press
+        getWeatherInfo(submitCount > 0)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [submitCount])
 
     return (
         <>
@@ -124,7 +124,7 @@ function Search() {
                 {/* onChange listens when value is being entered and will trigger the respective function (using inline function here) */}
                 {/* e.target.value holds whatever is being typed and will send it to searchTermFunction */}
                 <input type="search" placeholder='City Name' id='search' value={searchTerm} onChange={(e) => searchTermFunction(e.target.value)} />
-                <button className='searchButton' onClick={() => setIsStart(true)}>
+                <button className='searchButton' onClick={() => setSubmitCount((n) => n + 1)}>
                     {/* onClick={getWeatherInfo} */}
                     Forecast
                 </button>
