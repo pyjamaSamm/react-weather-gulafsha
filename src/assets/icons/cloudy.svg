@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Cloudy">
+  <defs>
+    <linearGradient id="cloud" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="46">
+      <stop offset="0" stop-color="#F4F7FA"/>
+      <stop offset="1" stop-color="#B7C4D1"/>
+    </linearGradient>
+    <linearGradient id="cloudBack" gradientUnits="userSpaceOnUse" x1="0" y1="12" x2="0" y2="30">
+      <stop offset="0" stop-color="#E3EAF1"/>
+      <stop offset="1" stop-color="#C4D0DB"/>
+    </linearGradient>
+    <style>
+      .drift  { animation: drift 7s ease-in-out infinite; }
+      .drift2 { animation: drift2 9s ease-in-out infinite; }
+      @keyframes drift {
+        0%, 100% { transform: translateX(-2.5px); }
+        50%      { transform: translateX(2.5px); }
+      }
+      @keyframes drift2 {
+        0%, 100% { transform: translateX(3px); }
+        50%      { transform: translateX(-3px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .drift, .drift2 { animation: none; }
+      }
+    </style>
+  </defs>
+
+  <g class="drift2" opacity=".8" fill="url(#cloudBack)">
+    <circle cx="20" cy="24" r="7"/>
+    <circle cx="31" cy="21" r="9"/>
+    <circle cx="41" cy="25" r="6.5"/>
+    <rect x="13" y="24" width="28" height="6" rx="3"/>
+  </g>
+
+  <g class="drift" fill="url(#cloud)">
+    <circle cx="23" cy="36" r="9"/>
+    <circle cx="36" cy="32" r="12"/>
+    <circle cx="47" cy="38" r="7.5"/>
+    <rect x="14" y="38" width="33" height="7.5" rx="3.75"/>
+  </g>
+</svg>

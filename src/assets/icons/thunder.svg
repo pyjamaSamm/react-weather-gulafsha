@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Thunderstorm">
+  <defs>
+    <linearGradient id="cloud" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="39">
+      <stop offset="0" stop-color="#C9D3DE"/>
+      <stop offset="1" stop-color="#788696"/>
+    </linearGradient>
+    <linearGradient id="bolt" gradientUnits="userSpaceOnUse" x1="32" y1="37" x2="32" y2="62">
+      <stop offset="0" stop-color="#FFE066"/>
+      <stop offset="1" stop-color="#FFA600"/>
+    </linearGradient>
+    <style>
+      .drift { animation: drift 7s ease-in-out infinite; }
+      .bolt  { animation: strike 2.4s ease-in-out infinite; transform-origin: 32px 44px; }
+      .flash { animation: flash 2.4s ease-in-out infinite; }
+      @keyframes drift {
+        0%, 100% { transform: translateX(-2px); }
+        50%      { transform: translateX(2px); }
+      }
+      @keyframes strike {
+        0%, 55%, 100% { opacity: .35; transform: scale(.94); }
+        60%, 70%      { opacity: 1;   transform: scale(1.06); }
+        65%           { opacity: .5;  transform: scale(1); }
+      }
+      @keyframes flash {
+        0%, 55%, 100% { opacity: 0; }
+        62%           { opacity: .5; }
+        72%           { opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .drift, .bolt, .flash { animation: none; opacity: 1; }
+      }
+    </style>
+  </defs>
+
+  <circle class="flash" cx="32" cy="30" r="22" fill="#FFDE59" opacity="0"/>
+
+  <g class="drift" fill="url(#cloud)">
+    <circle cx="21" cy="30" r="9"/>
+    <circle cx="34" cy="26" r="12"/>
+    <circle cx="45" cy="31" r="7.5"/>
+    <rect x="12" y="31" width="33" height="7.5" rx="3.75"/>
+  </g>
+
+  <path class="bolt" d="M35.5 37 L24 51 h7.5 L28.5 62 L41 46.5 h-7.6 z" fill="url(#bolt)"/>
+</svg>

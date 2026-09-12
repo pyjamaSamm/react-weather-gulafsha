@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../components/styles.css"
+import icons from '../assets/icons';
 import WeatherCard from './WeatherCard';
 import LowerWeatherCard from './LowerWeatherCard';
 
@@ -56,7 +57,7 @@ function Search() {
                         temp: day1,
                         date: day1_date_format,
                         desc: des,
-                        link: "https://firebasestorage.googleapis.com/v0/b/weather-react-74239.appspot.com/o/day.svg?alt=media&token=c05777c6-714c-433d-910c-b4ece5ff47e3"
+                        link: icons.day
                     }
                     arr.push(data)
                 }
@@ -80,18 +81,20 @@ function Search() {
             const { name } = data; //name of the place
             let windspeed = data["wind"]["speed"]
             let sunset = data["sys"]["sunset"]
+            let sunrise = data["sys"]["sunrise"]
+            let dt = data["dt"] //observation time, UTC - paired with sunrise/sunset to pick day vs night icons
             let { country } = data.sys
 
             let foundData = {}
             //make object of the found data to send it
             if (lat != null && lon != null && arr.length!=0) {
                 foundData = {
-                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, country, arr
+                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, sunrise, dt, country, arr
                 };
             }
             else{
                 foundData = {
-                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, country
+                    temp, humidity, pressure, weather, weatherDesc, icon, name, windspeed, sunset, sunrise, dt, country
                 };
             }
         

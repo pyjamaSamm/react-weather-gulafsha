@@ -134,3 +134,9 @@ p{
   }
 
 }
+.day img, .day1 img{
+  width: 46px;
+  height: 46px;
+  display: block;
+  margin: 0 auto 4px;
+}

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Snow">
+  <defs>
+    <linearGradient id="cloud" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="39">
+      <stop offset="0" stop-color="#E8EEF4"/>
+      <stop offset="1" stop-color="#A8B8C8"/>
+    </linearGradient>
+    <g id="flake" stroke="#5FB8E8" stroke-width="1.8" stroke-linecap="round">
+      <line x1="0" y1="-4.2" x2="0" y2="4.2"/>
+      <line x1="-3.6" y1="-2.1" x2="3.6" y2="2.1"/>
+      <line x1="-3.6" y1="2.1" x2="3.6" y2="-2.1"/>
+    </g>
+    <style>
+      .drift { animation: drift 7s ease-in-out infinite; }
+      .snow  { animation: snowfall 2.8s linear infinite; }
+      .s2 { animation-delay: .95s; }
+      .s3 { animation-delay: 1.9s; }
+      @keyframes drift {
+        0%, 100% { transform: translateX(-2px); }
+        50%      { transform: translateX(2px); }
+      }
+      @keyframes snowfall {
+        0%   { transform: translateY(0) rotate(0deg);      opacity: 0; }
+        15%  { opacity: 1; }
+        80%  { opacity: 1; }
+        100% { transform: translateY(14px) rotate(180deg); opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .drift, .snow { animation: none; }
+      }
+    </style>
+  </defs>
+
+  <g class="drift" fill="url(#cloud)">
+    <circle cx="21" cy="30" r="9"/>
+    <circle cx="34" cy="26" r="12"/>
+    <circle cx="45" cy="31" r="7.5"/>
+    <rect x="12" y="31" width="33" height="7.5" rx="3.75"/>
+  </g>
+
+  <g class="snow">    <use href="#flake" x="20" y="46"/></g>
+  <g class="snow s2"> <use href="#flake" x="32" y="48"/></g>
+  <g class="snow s3"> <use href="#flake" x="43" y="46"/></g>
+</svg>

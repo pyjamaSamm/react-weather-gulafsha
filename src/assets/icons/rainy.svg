@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Rain">
+  <defs>
+    <linearGradient id="cloud" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="39">
+      <stop offset="0" stop-color="#DCE4EC"/>
+      <stop offset="1" stop-color="#98A8B8"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7FD4FF"/>
+      <stop offset="1" stop-color="#2C9BE0"/>
+    </linearGradient>
+    <style>
+      .drift { animation: drift 7s ease-in-out infinite; }
+      .drop  { animation: fall 1.4s linear infinite; }
+      .d2 { animation-delay: .45s; }
+      .d3 { animation-delay: .9s; }
+      .d4 { animation-delay: .25s; }
+      @keyframes drift {
+        0%, 100% { transform: translateX(-2px); }
+        50%      { transform: translateX(2px); }
+      }
+      @keyframes fall {
+        0%   { transform: translateY(0);    opacity: 0; }
+        18%  { opacity: 1; }
+        75%  { opacity: 1; }
+        100% { transform: translateY(15px); opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .drift, .drop { animation: none; }
+      }
+    </style>
+  </defs>
+
+  <g class="drift" fill="url(#cloud)">
+    <circle cx="21" cy="30" r="9"/>
+    <circle cx="34" cy="26" r="12"/>
+    <circle cx="45" cy="31" r="7.5"/>
+    <rect x="12" y="31" width="33" height="7.5" rx="3.75"/>
+  </g>
+
+  <g fill="url(#drop)">
+    <path class="drop"    d="M20 42c1.8 2.6 2.8 4 2.8 5.2a2.8 2.8 0 0 1-5.6 0C17.2 46 18.2 44.6 20 42z"/>
+    <path class="drop d2" d="M30 44c1.8 2.6 2.8 4 2.8 5.2a2.8 2.8 0 0 1-5.6 0C27.2 48 28.2 46.6 30 44z"/>
+    <path class="drop d3" d="M40 42c1.8 2.6 2.8 4 2.8 5.2a2.8 2.8 0 0 1-5.6 0C37.2 46 38.2 44.6 40 42z"/>
+    <path class="drop d4" d="M35 51c1.4 2 2.2 3.1 2.2 4a2.2 2.2 0 0 1-4.4 0c0-.9.8-2 2.2-4z" opacity=".7"/>
+  </g>
+</svg>
